@@ -90,7 +90,7 @@ function search_news() {
         $num_items = count($news_items);
         $num_rows = 10;
         $num_pages = ceil($num_items / $num_rows);
-        $page = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+        $page_num = isset($_GET['pageNum']) && is_numeric($_GET['pageNum']) ? $_GET['pageNum'] : 1;
 
         ob_start();
         // Display search bar
@@ -103,26 +103,26 @@ function search_news() {
             $page_url = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https://" : "http://";   
             $page_url .= $_SERVER['HTTP_HOST'];
             $query_parameters = $_SERVER['REQUEST_URI'];
-            if (isset($_GET['page'])) {
-                $query_parameters = str_replace('&page=' . $page, '', $query_parameters);
+            if (isset($_GET['pageNum'])) {
+                $query_parameters = str_replace('&pageNum=' . $page_num, '', $query_parameters);
             }
             $page_url .= $query_parameters;
 
             // Display pagination buttons
             echo '<ul class="pagination">';
             for ($i = 1; $i <= $num_pages; $i++ ) {
-                if ($i == $page) {
-                    echo '<li class="page-item active"><a class="page-link" href="' . $page_url . '&page=' . $i . '">' . $i . '</a></li>';
+                if ($i == $page_num) {
+                    echo '<li class="page-item active"><a class="page-link" href="' . $page_url . '&pageNum=' . $i . '">' . $i . '</a></li>';
                 }
                 else {
-                    echo '<li class="page-item"><a class="page-link" href="' . $page_url . '&page=' . $i . '">' . $i . '</a></li>';
+                    echo '<li class="page-item"><a class="page-link" href="' . $page_url . '&pageNum=' . $i . '">' . $i . '</a></li>';
                 }
             }
             echo '</ul>';
 
         }
         echo '<div class="list-group">';
-        for ($i = ($page-1) * $num_rows; $i < $num_items && $i < ($page * $num_rows); $i++) {
+        for ($i = ($page_num-1) * $num_rows; $i < $num_items && $i < ($page_num * $num_rows); $i++) {
             echo '<a href="' . esc_url($news_items[$i]->link) . '" class="list-group-item list-group-item-action" target="_blank">' . esc_html($news_items[$i]->title) . '</a>';
         }
         echo '</div>';
